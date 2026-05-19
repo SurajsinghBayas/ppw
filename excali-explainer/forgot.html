@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forgot Password - Java Mastery</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        body { background-color: #fdfcf9; display: flex; justify-content: center; align-items: center; min-height: 100vh; flex-direction: column; margin: 0; }
+        .auth-container { width: 100%; max-width: 400px; padding: 2.5rem; background: var(--bg-color); box-sizing: border-box; }
+        .input-field { width: 100%; padding: 0.8rem; margin: 0.8rem 0; font-family: 'Kalam', cursive; font-size: 1.1rem; box-sizing: border-box; outline: none; }
+        .auth-btn { width: 100%; margin-top: 1rem; text-align: center; font-size: 1.2rem; cursor: pointer; padding: 0.8rem; }
+        .auth-links { margin-top: 1.5rem; text-align: center; font-size: 1rem; }
+        .auth-links a { color: #2980b9; text-decoration: none; font-weight: bold; }
+        .auth-links a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <div style="position: absolute; top: 20px; left: 20px;">
+        <a href="login.html" class="nav-btn sketchy-border" style="text-decoration:none;">⬅ Back to Login</a>
+    </div>
+
+    <div class="auth-container sketchy-border visual-box">
+        <h2 class="hatched-blue-small" style="text-align:center; padding:0.5rem; margin-bottom:1.5rem;">Reset Password</h2>
+        
+        <p style="text-align:center; font-size:1rem; margin-bottom: 1.5rem;">Enter your email and a new password to directly overwrite your old one.</p>
+        
+        <form id="forgotForm">
+            <input type="email" id="email" class="input-field sketchy-border" placeholder="Account Email" required>
+            
+            <div style="position:relative;">
+                <input type="password" id="newPassword" class="input-field sketchy-border" placeholder="New Password" required>
+                <span id="togglePassword" style="position:absolute; right:15px; top:22px; cursor:pointer; font-size: 1.2rem;">👁️</span>
+            </div>
+
+            <button type="submit" class="copy-btn sketchy-border auth-btn" style="background:#3498db; color:white; display:block;">Update Password</button>
+            <div id="error-msg" style="color:#e74c3c; text-align:center; margin-top:10px; display:none; font-weight:bold;"></div>
+            <div id="success-msg" style="color:#2ecc71; text-align:center; margin-top:10px; display:none; font-weight:bold;">Password updated!</div>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('togglePassword').addEventListener('click', function () {
+            const password = document.getElementById('newPassword');
+            if (password.type === 'password') {
+                password.type = 'text';
+                this.textContent = '🙈';
+            } else {
+                password.type = 'password';
+                this.textContent = '👁️';
+            }
+        });
+
+        document.getElementById('forgotForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = e.target.querySelector('button');
+            btn.textContent = "Resetting...";
+            
+            try {
+                const res = await fetch('/api/forgot', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        email: document.getElementById('email').value,
+                        newPassword: document.getElementById('newPassword').value
+                    })
+                });
+                const data = await res.json();
+                if(res.ok) {
+                    document.getElementById('error-msg').style.display = 'none';
+                    document.getElementById('success-msg').style.display = 'block';
+                    setTimeout(() => window.location.href = 'login.html', 1500);
+                } else {
+                    document.getElementById('error-msg').textContent = data.error || 'Reset failed';
+                    document.getElementById('error-msg').style.display = 'block';
+                    btn.textContent = "Update Password";
+                }
+            } catch(err) {
+                document.getElementById('error-msg').textContent = "Server error or not connected to DB.";
+                document.getElementById('error-msg').style.display = 'block';
+                btn.textContent = "Update Password";
+            }
+        });
+    </script>
+</body>
+</html>
