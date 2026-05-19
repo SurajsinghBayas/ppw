@@ -14,6 +14,7 @@
     <div class="nav-bar" style="display: flex; justify-content: space-between; align-items: center; width: 100%; box-sizing: border-box;">
         <a href="problems.html" class="nav-btn sketchy-border">🏠 Back to Problems</a>
         <div style="display:flex; gap:10px;">
+            <button id="toggle-toc-btn" class="nav-btn sketchy-border" style="cursor: pointer; background: #9b59b6; color: white;">📖 Toggle TOC</button>
             <button id="profile-btn" class="nav-btn sketchy-border" style="cursor: pointer; background: #3498db; color: white;">👤 Profile</button>
             <button id="theme-toggle" class="nav-btn sketchy-border" style="cursor: pointer; background: #2c3e50; color: white;">🌙 Blackboard</button>
         </div>
@@ -96,6 +97,19 @@
             localStorage.clear();
             window.location.href = 'index.html';
         });
+
+        // TOC Toggle Logic
+        const toggleTocBtn = document.getElementById('toggle-toc-btn');
+        const tocSidebar = document.querySelector('.toc-sidebar');
+        if (toggleTocBtn && tocSidebar) {
+            toggleTocBtn.addEventListener('click', () => {
+                if (tocSidebar.style.display === 'none') {
+                    tocSidebar.style.display = 'block';
+                } else {
+                    tocSidebar.style.display = 'none';
+                }
+            });
+        }
     </script>
 
     <script src="learn.js"></script>
