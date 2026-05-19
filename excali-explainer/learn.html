@@ -67,7 +67,8 @@
 
     <!-- Auth Guard & Profile Logic -->
     <script>
-        if (!localStorage.getItem('token')) {
+        const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+        if (!token) {
             window.location.href = 'index.html';
         }
 
@@ -77,8 +78,8 @@
 
         if (profileBtn) {
             profileBtn.addEventListener('click', () => {
-                document.getElementById('prof-name').textContent = localStorage.getItem('userName') || 'User';
-                document.getElementById('prof-email').textContent = localStorage.getItem('userEmail') || 'user@example.com';
+                document.getElementById('prof-name').textContent = localStorage.getItem('userName') || sessionStorage.getItem('userName') || 'User';
+                document.getElementById('prof-email').textContent = localStorage.getItem('userEmail') || sessionStorage.getItem('userEmail') || 'user@example.com';
                 profileModal.style.display = 'flex';
             });
         }
@@ -95,6 +96,7 @@
         });
         document.getElementById('logout-btn')?.addEventListener('click', () => {
             localStorage.clear();
+            sessionStorage.clear();
             window.location.href = 'index.html';
         });
 
