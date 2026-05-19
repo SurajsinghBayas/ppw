@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learn Java - The Visual Guide</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
+</head>
+<body>
+    <div class="nav-bar">
+        <a href="index.html" class="nav-btn sketchy-border">🏠 Back to Problems</a>
+    </div>
+
+    <div class="board">
+        <div class="title-banner hatched-orange sketchy-border">
+            <h1>LEARN JAVA VISUALLY</h1>
+            <p style="font-size: 1.5rem; margin-top: 10px;">From Basic Syntax to Advanced Event Handling</p>
+        </div>
+
+        <div class="search-container sketchy-border">
+            <input type="text" id="search-bar" placeholder="🔍 Search Java concepts (e.g. 'OOP', 'Loop', 'Event')...">
+        </div>
+
+        <div class="day-section">
+            <div class="section-title hatched-red-small sketchy-border">
+                <h2>The Java Curriculum</h2>
+            </div>
+            <div class="canvas-grid" id="curriculum-grid"></div>
+        </div>
+    </div>
+    
+    <div class="arrow" style="top: 25%; left: 10%; transform: rotate(15deg);"></div>
+    <div class="arrow" style="top: 70%; right: 5%; transform: rotate(-105deg);"></div>
+
+    <!-- Modal Background -->
+    <div id="modal-overlay" class="modal-overlay">
+        <!-- Modal Content Box -->
+        <div id="modal-content" class="modal-content sketchy-border">
+            <span id="close-modal" class="close-btn">&times;</span>
+            <h2 id="modal-title" class="modal-title hatched-orange-small"></h2>
+            
+            <div id="modal-body">
+                <div class="visual-section">
+                    <h3>🎨 Architecture & Flow</h3>
+                    <div id="modal-flowchart" class="mermaid-container sketchy-border"></div>
+                </div>
+                
+                <div class="explanation-grid">
+                    <div class="explanation-section">
+                        <h3>📖 The Theory</h3>
+                        <p id="modal-concept"></p>
+                    </div>
+                    
+                    <div class="explanation-section">
+                        <h3>🧠 Pro Insights</h3>
+                        <p id="modal-pro"></p>
+                    </div>
+                </div>
+                
+                <div class="explanation-section file-tag">
+                    <h3>💻 Code Example</h3>
+                    <pre id="modal-code" class="code-path sketchy-border" style="display: block; overflow-x: auto; white-space: pre-wrap; font-size: 1.1rem; padding: 1.5rem;"></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="learn.js"></script>
+</body>
+</html>

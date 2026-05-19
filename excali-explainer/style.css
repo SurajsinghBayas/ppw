@@ -1,0 +1,183 @@
+:root {
+    --bg-color: #fcfcfc;
+    --text-color: #111;
+    --red-hatch: rgba(228, 62, 59, 0.4);
+    --orange-hatch: rgba(243, 156, 18, 0.4);
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: 'Kalam', cursive;
+    margin: 0;
+    padding: 3rem 2rem;
+    overflow-x: hidden;
+}
+
+body.modal-open { overflow: hidden; }
+
+.board {
+    max-width: 1400px;
+    margin: 0 auto;
+    position: relative;
+}
+
+.sketchy-border {
+    border: 2px solid #222;
+    border-radius: 2% 6% 5% 4% / 1% 1% 2% 4%;
+    position: relative;
+    background: transparent;
+}
+
+.sketchy-border::after {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%; width: 100%; height: 100%;
+    border: 1px solid #222;
+    border-radius: 1% 1% 2% 4% / 2% 6% 5% 4%;
+    transform: translate(-50%, -50%) scale(1.01) rotate(0.3deg);
+    pointer-events: none; z-index: -1;
+}
+
+.hatched-red {
+    background: repeating-linear-gradient(60deg, transparent, transparent 5px, var(--red-hatch) 5px, var(--red-hatch) 6px);
+    background-color: #fff;
+}
+.hatched-red-small {
+    background: repeating-linear-gradient(60deg, transparent, transparent 4px, var(--red-hatch) 4px, var(--red-hatch) 5px);
+    background-color: #fff;
+}
+.hatched-orange-small {
+    background: repeating-linear-gradient(60deg, transparent, transparent 4px, var(--orange-hatch) 4px, var(--orange-hatch) 5px);
+    background-color: #fff;
+}
+
+.title-banner { text-align: center; padding: 1.5rem 2rem; margin-bottom: 4rem; transform: rotate(-0.5deg); }
+.title-banner h1 { font-size: 3.5rem; margin: 0; letter-spacing: 2px; }
+
+.section-title { display: inline-block; padding: 0.5rem 1.5rem; margin-bottom: 2rem; transform: rotate(-1.5deg); margin-left: 1rem; }
+.section-title h2 { font-size: 2.2rem; margin: 0; }
+
+.search-container {
+    max-width: 600px;
+    margin: 0 auto 3rem auto;
+    background: #fff;
+    padding: 0.2rem;
+    transform: rotate(0.5deg);
+    transition: transform 0.2s;
+}
+
+.search-container:focus-within {
+    transform: scale(1.02) rotate(-0.5deg);
+    box-shadow: 2px 4px 12px rgba(0,0,0,0.08);
+}
+
+#search-bar {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    font-family: 'Kalam', cursive;
+    font-size: 1.5rem;
+    border: none;
+    outline: none;
+    background: transparent;
+    color: #222;
+    box-sizing: border-box;
+}
+
+#search-bar::placeholder { color: #999; }
+
+.card.hidden { display: none !important; }
+.card.highlight { box-shadow: 0 0 15px rgba(230, 126, 34, 0.6); border-color: #e67e22; }
+
+.canvas-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 3rem; margin-bottom: 5rem; padding: 1rem;
+}
+
+.card {
+    padding: 1.5rem; background: #fff;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    display: flex; flex-direction: column; cursor: pointer;
+}
+.card:hover { transform: scale(1.05) rotate(1deg) !important; box-shadow: 4px 6px 12px rgba(0,0,0,0.08); }
+
+.card-qnum { font-size: 1.5rem; font-weight: bold; color: #e67e22; margin-bottom: 0.5rem; border-bottom: 2px solid #e67e22; display: inline-block; }
+.card-desc { font-size: 1.25rem; line-height: 1.4; margin-bottom: 1.5rem; flex-grow: 1; }
+.card-file { font-size: 1.1rem; color: #2980b9; padding-top: 0.8rem; margin-top: auto; text-align: right; border-top: 2px dashed #ccc; }
+
+.arrow { position: absolute; width: 60px; height: 60px; background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M10,50 Q50,10 90,50" fill="none" stroke="%23e67e22" stroke-width="3" stroke-linecap="round"/><path d="M75,35 L90,50 L75,65" fill="none" stroke="%23e67e22" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>'); opacity: 0.7; pointer-events: none; }
+
+/* Modal */
+.modal-overlay {
+    display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(5px); z-index: 1000;
+    justify-content: center; align-items: center;
+}
+
+.modal-content {
+    background: #fff; width: 95%; max-width: 1000px; max-height: 90vh;
+    padding: 2.5rem 3rem; position: relative;
+    box-sizing: border-box;
+    animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    display: flex;
+    flex-direction: column;
+}
+
+#modal-body {
+    overflow-y: auto;
+    flex-grow: 1;
+    padding-right: 1rem;
+}
+
+@keyframes popIn { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+
+.close-btn { position: absolute; top: 10px; right: 25px; font-size: 3rem; cursor: pointer; color: #e74c3c; transition: transform 0.2s; }
+.close-btn:hover { transform: scale(1.2) rotate(10deg); }
+
+.modal-title { font-size: 2rem; margin-top: 0; margin-bottom: 1.5rem; display: inline-block; padding: 0.5rem 1rem; }
+
+/* Flowchart */
+.visual-section { margin-bottom: 2rem; }
+.mermaid-container {
+    background: #fdfcf9;
+    padding: 1.5rem;
+    max-height: 45vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: auto;
+}
+
+.mermaid-container svg {
+    max-width: 100%;
+    height: auto !important;
+    max-height: 100%;
+}
+
+.explanation-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+}
+
+@media (max-width: 768px) {
+    .explanation-grid { grid-template-columns: 1fr; }
+}
+
+.explanation-section h3 { font-size: 1.6rem; color: #2980b9; margin-bottom: 0.8rem; border-bottom: 2px dashed #2980b9; display: inline-block; }
+.explanation-section p { font-size: 1.3rem; line-height: 1.5; color: #34495e; margin: 0; }
+
+.file-tag { margin-top: 2rem; }
+.code-path { 
+    display: inline-block; padding: 0.5rem 1rem; 
+    font-family: 'Courier New', Courier, monospace; 
+    font-size: 1.2rem; color: #c0392b; 
+    background: #fff; text-decoration: none; 
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.code-path:hover {
+    transform: scale(1.02) rotate(-1deg);
+    box-shadow: 2px 4px 10px rgba(192, 57, 43, 0.2);
+    color: #e74c3c;
+}
