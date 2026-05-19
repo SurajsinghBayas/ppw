@@ -162,7 +162,7 @@ body.modal-open { overflow: hidden; }
 
 @keyframes popIn { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
 
-.close-btn { position: absolute; top: 10px; right: 25px; font-size: 3rem; cursor: pointer; color: #e74c3c; transition: transform 0.2s; }
+.close-btn { position: absolute; top: 10px; right: 25px; font-size: 3rem; cursor: pointer; color: #e74c3c; transition: transform 0.2s; z-index: 100; }
 .close-btn:hover { transform: scale(1.2) rotate(10deg); }
 
 .modal-title { font-size: 2rem; margin-top: 0; margin-bottom: 1.5rem; display: inline-block; padding: 0.5rem 1rem; }
@@ -353,17 +353,40 @@ html.dark-mode body {
 
 /* --- Mobile Responsiveness --- */
 @media (max-width: 768px) {
+    .nav-bar {
+        position: relative !important;
+        top: 0 !important; right: 0 !important; left: 0 !important;
+        width: 100% !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: center !important;
+        align-items: center !important;
+        gap: 10px !important;
+        padding: 1rem !important;
+        box-sizing: border-box;
+        margin-bottom: 2rem;
+    }
+    .board {
+        padding-top: 10px !important;
+    }
     .explanation-grid {
         grid-template-columns: 1fr !important;
         gap: 1rem;
     }
     .modal-content {
         width: 95% !important;
-        padding: 1rem !important;
+        padding: 3rem 1rem 1rem 1rem !important; /* Extra top padding for the close button */
         max-height: 95vh;
+    }
+    .close-btn {
+        top: 5px !important;
+        right: 15px !important;
+        font-size: 2.5rem !important;
     }
     .learn-container {
         flex-direction: column;
+        padding-top: 0 !important;
+        height: auto !important;
     }
     .toc-sidebar {
         display: none !important; /* Hide TOC on mobile for better reading space */
@@ -375,12 +398,17 @@ html.dark-mode body {
         width: 100% !important;
         box-sizing: border-box;
     }
-    .nav-bar {
-        padding: 0.5rem;
-    }
-    h2.hatched-red-small {
+    h2.hatched-red-small, h2.hatched-blue-small, h2.hatched-orange-small {
         font-size: 1.5rem !important;
     }
+    .auth-container {
+        margin: 5vh auto !important;
+        padding: 1.5rem !important;
+    }
+    .hero-title { font-size: 2.5rem !important; padding: 1rem !important; }
+    .hero-subtitle { font-size: 1.2rem !important; }
+    .action-buttons { flex-direction: column; width: 100%; gap: 1rem; }
+    .primary-btn, .secondary-btn { font-size: 1.2rem !important; width: 100%; box-sizing: border-box; text-align: center; }
 }
 
 /* --- Print Friendly Cheat-Sheet Mode --- */
