@@ -1,5 +1,4 @@
 const pool = require('./db');
-const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 module.exports = async (req, res) => {
@@ -13,7 +12,22 @@ module.exports = async (req, res) => {
         if (result.rows.length === 0) return res.status(400).json({ error: 'Invalid credentials.' });
 
         const user = result.rows[0];
-        const match = await bcrypt.compare(password, user.password);
+        let match = false;
+
+        if (user.password.startsWith('$2')) {
+            // Dynamic import to avoid loading heavy bcrypt on fast native paths
+            const bcrypt = require('bcrypt');
+            match = await bcrypt.compare(password, user.password);
+        } else {
+            // Ultra-fast native pbkdf2 validation
+            const [salt, originalHash] = user.password.split(':');
+            if (salt && originalHash) {
+                const crypto = require('crypto');
+                const hash = crypto.pbkdf2Sync(password, salt, 1000, 64, 'sha512').toString('hex');
+                match = hash === originalHash;
+            }
+        }
+
         if (!match) return res.status(400).json({ error: 'Invalid credentials.' });
 
         const token = jwt.sign({ userId: user.id }, 'super-secret-key-java-mastery', { expiresIn: '7d' });
