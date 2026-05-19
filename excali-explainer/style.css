@@ -409,6 +409,32 @@ html.dark-mode body {
     .hero-subtitle { font-size: 1.2rem !important; }
     .action-buttons { flex-direction: column; width: 100%; gap: 1rem; }
     .primary-btn, .secondary-btn { font-size: 1.2rem !important; width: 100%; box-sizing: border-box; text-align: center; }
+
+    /* Learn Canvas specific mobile tweaks */
+    .learn-content {
+        padding-right: 0 !important;
+        padding-top: 1rem !important;
+        width: 100% !important;
+        box-sizing: border-box;
+    }
+    .learn-section {
+        padding: 1.5rem 1rem !important;
+        margin-bottom: 2rem !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+    .custom-visual {
+        padding: 1rem !important;
+        flex-direction: column !important;
+    }
+    .visual-arrow {
+        transform: rotate(90deg);
+        margin: 10px 0;
+    }
+    .code-container pre {
+        font-size: 0.95rem !important;
+        padding: 1rem !important;
+    }
 }
 
 /* --- Print Friendly Cheat-Sheet Mode --- */
