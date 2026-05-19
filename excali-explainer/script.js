@@ -356,6 +356,15 @@ const day2Problems = [
         q: "Q12", file: "day02/money.java", desc: "Find total number of notes in a given amount",
         concept: "A Greedy Algorithm: Divide the amount by the largest denomination first to get quantity, then pass the remainder down to the next.",
         pro: "Don't copy-paste logic! Use an array `int[] notes = {500, 100, 50, 20...}` and loop through it to keep the codebase DRY (Don't Repeat Yourself).",
+        pseudo: `1. START
+2. Read Amount
+3. notes500 = Amount / 500, Amount = Amount % 500
+4. notes100 = Amount / 100, Amount = Amount % 100
+5. notes50 = Amount / 50, Amount = Amount % 50
+6. notes20 = Amount / 20, Amount = Amount % 20
+7. notes10 = Amount / 10, Amount = Amount % 10
+8. Print all notes counts
+9. END`,
         flow: "flowchart TD\n A[/Amount/] --> B[Qty = Amount / 500]\n B --> C[Amount = Amount % 500]\n C --> D[Qty = Amount / 100]\n D --> E[Amount = Amount % 100]\n E -.-> F[/Continue.../]"
     },
     { 
@@ -427,6 +436,16 @@ const day2Problems = [
         q: "Q19", file: "day02/digitname.java", desc: "Convert number (1-5) to word equivalent using switch",
         concept: "Mapping numerical inputs to string outputs directly using case matches.",
         pro: "Using a Switch for this is actually inefficient boilerplate! A senior dev creates an array: `String[] words = {\"One\", \"Two\", \"Three\"};` and retrieves it via `words[n-1]`. Zero logic needed.",
+        pseudo: `1. START
+2. Read N
+3. SWITCH (N):
+     CASE 1: Print 'One'
+     CASE 2: Print 'Two'
+     CASE 3: Print 'Three'
+     CASE 4: Print 'Four'
+     CASE 5: Print 'Five'
+     DEFAULT: Print 'Invalid'
+4. END`,
         flow: "flowchart LR\n A[/Input N/] --> B{Switch (N)}\n B -- 1 --> C[/One/]\n B -- 2 --> D[/Two/]\n B -- default --> E[/Invalid/]"
     }
 ];
