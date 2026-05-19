@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy - Java Mastery</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        body { background-color: #fdfcf9; display: flex; justify-content: center; align-items: center; min-height: 100vh; flex-direction: column; margin: 0; padding: 2rem 1rem; box-sizing: border-box; }
+        .doc-container { width: 100%; max-width: 800px; padding: 2.5rem; background: var(--bg-color); box-sizing: border-box; font-family: 'Kalam', cursive; line-height: 1.6; }
+        h1, h2, h3 { font-family: 'Kalam', cursive; }
+        p, li { font-size: 1.1rem; }
+    </style>
+</head>
+<body>
+    <div style="margin-bottom: 20px; align-self: flex-start; max-width: 800px; width: 100%; margin: 0 auto 20px auto;">
+        <a href="index.html" class="nav-btn sketchy-border" style="text-decoration:none;">⬅ Back to Home</a>
+    </div>
+
+    <div class="doc-container sketchy-border visual-box">
+        <h1 class="hatched-orange-small" style="text-align:center; padding:0.5rem; margin-bottom:1.5rem; display: inline-block;">Privacy Policy</h1>
+        
+        <p>At <b>Java Mastery</b>, we value your privacy. This policy outlines how we handle your personal data when you interact with our platform.</p>
+
+        <h2 class="hatched-blue-small" style="display:inline-block; padding:0.2rem 0.5rem; margin-top: 1.5rem;">1. Information We Collect</h2>
+        <p>When you register on Java Mastery, we collect standard credentials including your <b>Name</b>, <b>Email Address</b>, and a <b>Hashed Password</b>. Passwords are encrypted immediately using bcrypt on the server, meaning we do not store, and cannot view, your actual plain-text password.</p>
+
+        <h2 class="hatched-blue-small" style="display:inline-block; padding:0.2rem 0.5rem; margin-top: 1.5rem;">2. How We Use Information</h2>
+        <p>We use your information solely to:</p>
+        <ul>
+            <li>Create and maintain your user account.</li>
+            <li>Enable secure login and session management (JWT tokens).</li>
+            <li>Maintain database association of your profile details.</li>
+        </ul>
+        <p>We do NOT track your browsing habits, sell your data to third parties, or send promotional spam emails.</p>
+
+        <h2 class="hatched-blue-small" style="display:inline-block; padding:0.2rem 0.5rem; margin-top: 1.5rem;">3. Data Storage & Security</h2>
+        <p>Our serverless database backend is hosted securely on Neon DB. While we use standard best practices to secure your data (e.g. hashing passwords, HTTPS traffic redirection), no transmission over the internet is 100% secure. We encourage you to use unique passwords.</p>
+
+        <h2 class="hatched-blue-small" style="display:inline-block; padding:0.2rem 0.5rem; margin-top: 1.5rem;">4. Cookies and Session Storage</h2>
+        <p>We use your browser's local storage or session storage to keep you logged in between sessions (so you do not have to log in every time you open the app). We do not use third-party tracking or advertising cookies.</p>
+
+        <h2 class="hatched-blue-small" style="display:inline-block; padding:0.2rem 0.5rem; margin-top: 1.5rem;">5. Contact Us</h2>
+        <p>If you wish to have your account deleted or have questions regarding your data, you can reach out via our GitHub repository issues panel.</p>
+
+        <p style="margin-top: 2rem; font-weight: bold; text-align: center; border-top: 2px dashed #e67e22; padding-top: 1rem;">
+            Last Updated: May 2026
+        </p>
+    </div>
+</body>
+</html>
