@@ -11,8 +11,14 @@
 </head>
 <body>
     <div class="nav-bar" style="display: flex; justify-content: space-between; align-items: center; width: 100%; box-sizing: border-box;">
-        <a href="learn.html" class="nav-btn sketchy-border">📚 Learn Java Concepts</a>
-        <button id="profile-btn" class="nav-btn sketchy-border" style="cursor: pointer; background: #3498db; color: white;">👤 Profile</button>
+        <div style="display:flex; gap:10px; flex-wrap: wrap;">
+            <a href="learn.html" class="nav-btn sketchy-border" style="transform: rotate(-1deg); background:#2ecc71; text-decoration:none;">📚 Learn Concepts</a>
+            <a href="patterns.html" class="nav-btn sketchy-border" style="transform: rotate(2deg); background:#9b59b6; color:white; text-decoration:none;">✨ Learn Patterns</a>
+        </div>
+        <div style="display:flex; gap:10px; flex-wrap: wrap;">
+            <button id="profile-btn" class="nav-btn sketchy-border" style="cursor: pointer; background: #3498db; color: white; transform: rotate(1deg);">👤 Profile</button>
+            <button id="theme-toggle" class="nav-btn sketchy-border" style="cursor: pointer; background: #2c3e50; color: white; transform: rotate(-1deg);">🌙 Blackboard</button>
+        </div>
     </div>
 
     <div class="board">
@@ -144,6 +150,28 @@
             sessionStorage.clear();
             window.location.href = 'index.html';
         });
+
+        // Blackboard Theme Toggle
+        const themeToggle = document.getElementById('theme-toggle');
+        if (themeToggle) {
+            if (localStorage.getItem('theme') === 'dark') {
+                document.documentElement.classList.add('dark-mode');
+                themeToggle.textContent = '☀️ Whiteboard';
+            } else {
+                themeToggle.textContent = '🌙 Blackboard';
+            }
+
+            themeToggle.addEventListener('click', () => {
+                document.documentElement.classList.toggle('dark-mode');
+                if (document.documentElement.classList.contains('dark-mode')) {
+                    localStorage.setItem('theme', 'dark');
+                    themeToggle.textContent = '☀️ Whiteboard';
+                } else {
+                    localStorage.setItem('theme', 'light');
+                    themeToggle.textContent = '🌙 Blackboard';
+                }
+            });
+        }
     </script>
 
     <!-- Footer Credits -->

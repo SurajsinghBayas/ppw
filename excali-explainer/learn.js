@@ -811,6 +811,134 @@ public class HelloController {
             <div class="visual-arrow">➔ Returns ➔</div>
             <div class="visual-box" style="border-color: #9b59b6;"><b>JSON Data</b></div>
         `
+    },
+    {
+        id: "sec-36",
+        q: "36. Understanding Complexity",
+        desc: "Mastering Time and Space (Big O)",
+        concept: "Complexity measures how the running time or memory usage of an algorithm grows as the input size (N) increases. It is expressed using Big O notation, which represents the worst-case scenario.",
+        pro: "Always identify the dominant term and ignore constants. For example, O(3N² + 5N + 12) simplifies to O(N²). Space complexity measures the extra memory used, excluding the input storage.",
+        code: `public class ComplexityTracer {
+    // 1. Constant Time: O(1) - Number of operations does not depend on N
+    public int getFirstElement(int[] arr) {
+        return arr[0]; // Exactly 1 operation
+    }
+
+    // 2. Logarithmic Time: O(log N) - Problem size is halved at each step
+    public int binarySearch(int[] arr, int target) {
+        int low = 0, high = arr.length - 1;
+        while (low <= high) {
+            int mid = low + (high - low) / 2;
+            if (arr[mid] == target) return mid;
+            else if (arr[mid] < target) low = mid + 1;
+            else high = mid - 1;
+        }
+        return -1;
+    }
+
+    // 3. Linear Time: O(N) - Loop runs proportionally to N
+    public int findMax(int[] arr) {
+        int max = arr[0];
+        for (int val : arr) { // Runs N times
+            if (val > max) max = val;
+        }
+        return max;
+    }
+
+    // 4. Quadratic Time: O(N²) - Nested loops both running up to N
+    public void printAllPairs(int[] arr) {
+        for (int i = 0; i < arr.length; i++) { // Outer loop: N times
+            for (int j = 0; j < arr.length; j++) { // Inner loop: N times
+                System.out.println(arr[i] + ", " + arr[j]); // N * N total runs
+            }
+        }
+    }
+}`,
+        visualHtml: `
+            <style>
+                .sim-btn {
+                    font-family: 'Kalam', cursive;
+                    border: 2px solid #222;
+                    border-radius: 4px;
+                    color: white;
+                    cursor: pointer;
+                    transition: transform 0.1s, background-color 0.2s;
+                    box-shadow: 2px 2px 0 #222;
+                }
+                .sim-btn:hover {
+                    transform: translateY(-2px);
+                    box-shadow: 3px 3px 0 #222;
+                }
+                .sim-btn:active {
+                    transform: translateY(1px);
+                    box-shadow: 1px 1px 0 #222;
+                }
+                @media (max-width: 768px) {
+                    #comp-details-grid {
+                        grid-template-columns: 1fr !important;
+                        gap: 1.5rem;
+                    }
+                }
+            </style>
+            <div class="complexity-playground" style="width: 100%; display: flex; flex-direction: column; gap: 1.5rem; text-align: left; font-family: 'Kalam', cursive;">
+                <div style="background: rgba(230, 126, 34, 0.05); padding: 15px; border-radius: 8px; border: 2px dashed #e67e22;">
+                    <h4 style="margin: 0 0 10px 0; color: #d35400; font-size: 1.4rem;">🎯 Interactive Scalability Sandbox</h4>
+                    <p style="margin: 0 0 15px 0; font-size: 1.15rem;">Select an algorithm class below and slide the input size <b>N</b> to see how the operations and speed comparison scales!</p>
+                    
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 15px;" id="comp-tabs">
+                        <button class="sim-btn" onclick="selectCompTab('O1', this)" style="background: #e67e22; border-color: #222; font-size: 1rem; padding: 6px 12px; margin-bottom:5px;">O(1) Constant</button>
+                        <button class="sim-btn" onclick="selectCompTab('OlogN', this)" style="background: #34495e; border-color: #222; font-size: 1rem; padding: 6px 12px; margin-bottom:5px;">O(log N) Logarithmic</button>
+                        <button class="sim-btn" onclick="selectCompTab('ON', this)" style="background: #34495e; border-color: #222; font-size: 1rem; padding: 6px 12px; margin-bottom:5px;">O(N) Linear</button>
+                        <button class="sim-btn" onclick="selectCompTab('ON2', this)" style="background: #34495e; border-color: #222; font-size: 1rem; padding: 6px 12px; margin-bottom:5px;">O(N²) Quadratic</button>
+                    </div>
+
+                    <div style="display: flex; align-items: center; gap: 15px; background: #fff; padding: 10px; border: 2px solid #222; border-radius: 5px; margin-bottom: 15px;">
+                        <label for="comp-n-slider" style="font-weight: bold; font-size: 1.2rem; min-width: 140px;">Input Size N: <span id="comp-n-val" style="color: #e74c3c;">100</span></label>
+                        <input type="range" id="comp-n-slider" min="10" max="1000" step="10" value="100" style="flex-grow: 1; cursor: pointer;">
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;" id="comp-details-grid">
+                    <!-- Left: Code and Math -->
+                    <div class="sketchy-border" style="background: #fff; padding: 15px; display: flex; flex-direction: column; justify-content: space-between;">
+                        <div>
+                            <h4 id="comp-title" style="margin: 0 0 10px 0; color: #2980b9; font-size: 1.3rem;">Constant Complexity O(1)</h4>
+                            <div id="comp-math-desc" style="font-size: 1.15rem; color: #555; margin-bottom: 10px; line-height: 1.4;">
+                                No matter if N is 10 or 1,000,000, this program takes exactly the same number of operations to finish.
+                            </div>
+                        </div>
+                        <div style="background: #fdfcf9; border-left: 4px solid #2980b9; padding: 10px; font-family: monospace; font-size: 0.95rem; white-space: pre; overflow-x: auto;" id="comp-code-preview">int val = arr[0]; // 1 step</div>
+                    </div>
+
+                    <!-- Right: Visual Scaling Meter -->
+                    <div class="sketchy-border" style="background: #fff; padding: 15px; display: flex; flex-direction: column; justify-content: space-between;">
+                        <h4 style="margin: 0 0 10px 0; color: #2ecc71; font-size: 1.3rem;">📊 Live Step Counter</h4>
+                        <div style="flex-grow: 1; display: flex; flex-direction: column; justify-content: center; gap: 10px;">
+                            <div style="font-size: 1.2rem;">
+                                Expected Operations: <span id="comp-ops-count" style="font-weight: bold; color: #e74c3c;">1</span>
+                            </div>
+                            <div style="height: 25px; width: 100%; background: #eee; border: 2px solid #222; border-radius: 4px; overflow: hidden; position: relative;">
+                                <div id="comp-ops-bar" style="height: 100%; width: 0.1%; background: #2ecc71; transition: width 0.3s ease;"></div>
+                            </div>
+                            <div style="font-size: 1.05rem; color: #555;" id="comp-ops-explain">
+                                A single math computation. Execution time is virtually instant (e.g., &lt; 0.01ms).
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sketchy-border" style="background: #fcfcfc; padding: 15px; border-color: #27ae60;">
+                    <h4 style="margin: 0 0 10px 0; color: #27ae60; font-size: 1.3rem;">💡 Quick Rules of Thumb to Determine Complexity</h4>
+                    <ul style="margin: 0; padding-left: 20px; font-size: 1.15rem; line-height: 1.5; color: #34495e;">
+                        <li><b>Single Loop (1 to N)</b>: O(N) Time complexity.</li>
+                        <li><b>Nested Loops (each to N)</b>: Multiply outer and inner, so O(N * N) = O(N²) Time complexity.</li>
+                        <li><b>Input divided/multiplied by 2</b> (e.g. binary search, dividing N): O(log N) Time complexity.</li>
+                        <li><b>Recursive doubling</b> (e.g. Fibonacci, generating subsets): O(2^N) Time complexity.</li>
+                        <li><b>Space Complexity</b>: Only count the *extra* memory allocated. If you create an array of size N, space is O(N). If you only declare regular variables, space is O(1).</li>
+                    </ul>
+                </div>
+            </div>
+        `
     }
 ];
 
@@ -844,14 +972,14 @@ curriculum.forEach(item => {
         </div>
 
         <div class="visual-section" style="margin-top: 3rem;">
-            <h3 style="font-size: 1.6rem; color: #2980b9; border-bottom: 2px dashed #2980b9; display: inline-block;">🎨 Syntax Visualization</h3>
+            <h3 style="font-size: 1.6rem; color: #2980b9; border-bottom: 2px dashed #2980b9; display: inline-block;">🎨 Syntax/Concept Visualization</h3>
             <div class="custom-visual sketchy-border">
                 ${item.visualHtml}
             </div>
         </div>
         
         <div class="explanation-section file-tag">
-            <h3>💻 Syntax Example</h3>
+            <h3>💻 Syntax/Code Example</h3>
             <div class="code-container">
                 <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
                 <pre class="code-path sketchy-border" style="display: block; overflow-x: auto; white-space: pre-wrap; font-size: 1.1rem; padding: 1.5rem; width: 100%; box-sizing: border-box;">${item.code}</pre>
@@ -861,6 +989,120 @@ curriculum.forEach(item => {
     
     contentContainer.appendChild(section);
 });
+
+// --- Complexity Simulator Logic ---
+window.selectedComp = 'O1';
+window.compN = 100;
+
+window.selectCompTab = function(type, btn) {
+    window.selectedComp = type;
+    
+    // De-highlight all buttons in the comp-tabs container
+    const buttons = document.querySelectorAll('#comp-tabs button');
+    buttons.forEach(b => {
+        b.style.background = '#34495e';
+    });
+    btn.style.background = '#e67e22';
+    
+    window.updateComplexitySim();
+};
+
+window.updateComplexitySim = function() {
+    const titleEl = document.getElementById('comp-title');
+    const mathDescEl = document.getElementById('comp-math-desc');
+    const codePreviewEl = document.getElementById('comp-code-preview');
+    const opsCountEl = document.getElementById('comp-ops-count');
+    const opsBarEl = document.getElementById('comp-ops-bar');
+    const opsExplainEl = document.getElementById('comp-ops-explain');
+    
+    if (!titleEl) return; // Guard for pages/views where the elements are not loaded yet
+    
+    let title = "";
+    let mathDesc = "";
+    let codePreview = "";
+    let opsCount = 0;
+    let barWidth = 0;
+    let opsExplain = "";
+    
+    const N = window.compN;
+    
+    switch (window.selectedComp) {
+        case 'O1':
+            title = "Constant Complexity O(1)";
+            mathDesc = "No matter if N is 10 or 1,000,000, this program takes exactly the same number of operations (1 step) to finish. The execution time does not scale with size.";
+            codePreview = "int val = arr[0]; // Exactly 1 operation";
+            opsCount = 1;
+            barWidth = 0.5;
+            opsExplain = "A single array read. Execution time is virtually instant (< 0.01ms).";
+            break;
+            
+        case 'OlogN':
+            title = "Logarithmic Complexity O(log N)";
+            mathDesc = "The input size is halved at each step. Doubling the input size N only increases the execution count by 1 step! Log N is exceptionally fast and scales amazingly well.";
+            codePreview = `int low = 0, high = n - 1;
+while (low <= high) {
+    int mid = low + (high - low) / 2;
+    if (arr[mid] == target) return mid;
+    else if (arr[mid] < target) low = mid + 1;
+    else high = mid - 1; // Halves the search space
+}`;
+            opsCount = Math.ceil(Math.log2(N));
+            barWidth = (Math.log2(N) / Math.log2(1000)) * 10;
+            opsExplain = `For N = ${N}, halving the inputs recursively takes only ${opsCount} iterations. (< 0.1ms).`;
+            break;
+            
+        case 'ON':
+            title = "Linear Complexity O(N)";
+            mathDesc = "The number of operations scales 1:1, directly proportional to the size of N. If N is 10, it runs 10 times. If N is 1000, it runs 1000 times.";
+            codePreview = `for (int i = 0; i < n; i++) {
+    sum += arr[i]; // Runs exactly N times
+}`;
+            opsCount = N;
+            barWidth = (N / 1000) * 40;
+            opsExplain = `Standard single-loop iteration. Runs exactly ${N} times. (~ 0.2ms).`;
+            break;
+            
+        case 'ON2':
+            title = "Quadratic Complexity O(N²)";
+            mathDesc = "For every element, we loop through all elements again (nested loops). If N doubles, the work increases by 4 times! Extremely heavy on system resources for large N.";
+            codePreview = `for (int i = 0; i < n; i++) {
+    for (int j = 0; j < n; j++) {
+        System.out.println(i + "," + j); // Runs N * N times
+    }
+}`;
+            opsCount = N * N;
+            barWidth = ((N * N) / 1000000) * 100;
+            opsExplain = `Nested loops running N * N times. For N = ${N}, this requires a massive ${opsCount.toLocaleString()} operations! (~ 5ms to 20ms).`;
+            break;
+    }
+    
+    titleEl.textContent = title;
+    mathDescEl.textContent = mathDesc;
+    codePreviewEl.textContent = codePreview;
+    opsCountEl.textContent = opsCount.toLocaleString();
+    opsBarEl.style.width = barWidth + "%";
+    opsExplainEl.textContent = opsExplain;
+};
+
+window.initComplexitySimulator = function() {
+    const slider = document.getElementById('comp-n-slider');
+    if (!slider) return;
+    
+    slider.addEventListener('input', (e) => {
+        window.compN = parseInt(e.target.value);
+        document.getElementById('comp-n-val').textContent = window.compN;
+        window.updateComplexitySim();
+    });
+    
+    window.updateComplexitySim();
+};
+
+// Initialize complexity dashboard elements
+setTimeout(() => {
+    if (window.initComplexitySimulator) {
+        window.initComplexitySimulator();
+    }
+}, 200);
 
 // --- NEW FEATURES LOGIC ---
 

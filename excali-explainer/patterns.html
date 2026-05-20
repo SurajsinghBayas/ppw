@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pattern Printing Masterclass - Interactive Whiteboard</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            padding: 0;
+            overflow: hidden;
+            background-color: var(--bg-color);
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        .nav-bar {
+            position: static;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            padding: 10px 20px;
+            box-sizing: border-box;
+            background: #fff;
+            border-bottom: 2px dashed #ccc;
+            z-index: 100;
+        }
+
+        .nav-title {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin: 0;
+            color: #2c3e50;
+            transform: rotate(-0.5deg);
+        }
+
+        .patterns-container {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .patterns-sidebar {
+            width: 320px;
+            flex-shrink: 0;
+            background: #fff;
+            padding: 1rem;
+            overflow-y: auto;
+            border-right: 2px dashed #ccc;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .patterns-sidebar h2 {
+            font-size: 1.6rem;
+            margin-top: 0;
+            margin-bottom: 1rem;
+            text-align: center;
+            transform: rotate(-1deg);
+        }
+
+        .pattern-list-item {
+            padding: 10px 12px;
+            margin-bottom: 8px;
+            border-bottom: 2px dashed #eee;
+            cursor: pointer;
+            font-size: 1.15rem;
+            transition: all 0.2s;
+            border-radius: 4px;
+        }
+
+        .pattern-list-item:hover {
+            color: #e67e22;
+            background: rgba(230, 126, 34, 0.05);
+            transform: translateX(4px);
+        }
+
+        .pattern-list-item.active {
+            background: rgba(231, 76, 60, 0.1);
+            border: 2px solid #e74c3c;
+            color: #e74c3c;
+            font-weight: bold;
+            transform: translateX(6px) rotate(0.5deg);
+        }
+
+        .patterns-canvas {
+            flex-grow: 1;
+            padding: 1.5rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            box-sizing: border-box;
+        }
+
+        .control-panel {
+            background: #fff;
+            padding: 1rem 1.5rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .control-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.25rem;
+        }
+
+        .control-slider {
+            width: 120px;
+            cursor: pointer;
+        }
+
+        .sim-btn {
+            background: #e67e22;
+            color: white;
+            border: 2px solid #222;
+            padding: 8px 15px;
+            font-family: 'Kalam', cursive;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 5px;
+            box-shadow: 2px 2px 0 #222;
+            transition: all 0.1s;
+        }
+
+        .sim-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 3px 3px 0 #222;
+        }
+
+        .sim-btn:active {
+            transform: translateY(1px);
+            box-shadow: 1px 1px 0 #222;
+        }
+
+        .workspace-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 1.5rem;
+            flex-grow: 1;
+        }
+
+        .whiteboard-box {
+            background: #fff;
+            padding: 1.5rem;
+            min-height: 380px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .whiteboard-box h3 {
+            font-size: 1.5rem;
+            margin-top: 0;
+            margin-bottom: 1rem;
+            color: #2980b9;
+            border-bottom: 2px dashed #2980b9;
+            display: inline-block;
+        }
+
+        .pattern-grid-visualizer {
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #fafafa;
+            border: 2px dashed #ccc;
+            padding: 1rem;
+            overflow: auto;
+            position: relative;
+        }
+
+        /* The Grid cell system */
+        .pattern-display-table {
+            border-collapse: collapse;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1.6rem;
+            font-weight: bold;
+        }
+
+        .pattern-display-table td {
+            width: 32px;
+            height: 32px;
+            text-align: center;
+            vertical-align: middle;
+            border: 1px dashed #ddd;
+            position: relative;
+            user-select: none;
+            transition: background-color 0.15s;
+        }
+
+        .pattern-display-table td.active-cell {
+            background-color: rgba(241, 196, 15, 0.4);
+            border: 2px solid #f1c40f;
+            animation: pulse-border 1s infinite alternate;
+        }
+
+        .pattern-display-table td.printed-star {
+            color: #e74c3c;
+        }
+
+        .pattern-display-table td.printed-space {
+            color: #bbb;
+            font-size: 0.9rem;
+        }
+
+        .code-explorer {
+            font-family: 'Courier New', Courier, monospace;
+            background: #272822;
+            color: #f8f8f2;
+            padding: 1rem;
+            overflow-x: auto;
+            font-size: 1.05rem;
+            line-height: 1.4;
+            border-radius: 6px;
+            flex-grow: 1;
+            margin: 0;
+        }
+
+        .code-line {
+            display: block;
+            padding-left: 10px;
+            border-left: 3px solid transparent;
+            white-space: pre;
+        }
+
+        .code-line.active-line {
+            background: #49483e;
+            border-left: 3px solid #f1c40f;
+            font-weight: bold;
+        }
+
+        .explain-card {
+            background: #fff;
+            padding: 1.5rem;
+        }
+
+        .explain-card h3 {
+            margin-top: 0;
+            color: #27ae60;
+            border-bottom: 2px dashed #27ae60;
+            display: inline-block;
+            font-size: 1.5rem;
+        }
+
+        .explain-details {
+            font-size: 1.25rem;
+            line-height: 1.5;
+        }
+
+        .explain-details ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        .explain-details li {
+            margin-bottom: 5px;
+        }
+
+        .dryrun-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            font-size: 1.15rem;
+        }
+
+        .dryrun-table th, .dryrun-table td {
+            border: 2px solid #222;
+            padding: 6px 10px;
+            text-align: center;
+        }
+
+        .dryrun-table th {
+            background: var(--orange-hatch);
+        }
+
+        /* Mobile Dropdown */
+        .mobile-select-container {
+            display: none;
+            width: 100%;
+            padding: 10px;
+            background: #fff;
+            border-bottom: 2px dashed #ccc;
+            box-sizing: border-box;
+        }
+
+        .mobile-select-container select {
+            width: 100%;
+            padding: 12px;
+            font-family: 'Kalam', cursive;
+            font-size: 1.25rem;
+            border: 2px solid #222;
+            border-radius: 5px;
+            background: #fff;
+        }
+
+        /* Animation */
+        @keyframes pulse-border {
+            from { box-shadow: 0 0 2px rgba(241, 196, 15, 0.5); }
+            to { box-shadow: 0 0 10px rgba(241, 196, 15, 0.8); }
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            body {
+                overflow-y: auto;
+                height: auto;
+            }
+            
+            .nav-bar {
+                flex-direction: column;
+                gap: 10px;
+                padding: 10px;
+            }
+
+            .patterns-container {
+                flex-direction: column;
+                height: auto;
+                overflow: visible;
+            }
+
+            .patterns-sidebar {
+                display: none;
+            }
+
+            .mobile-select-container {
+                display: block;
+            }
+
+            .patterns-canvas {
+                padding: 10px;
+                overflow: visible;
+            }
+
+            .workspace-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .whiteboard-box {
+                min-height: auto;
+            }
+
+            .control-panel {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 15px;
+            }
+
+            .control-group {
+                justify-content: space-between;
+            }
+
+            .control-slider {
+                width: 60%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <div class="nav-bar">
+        <a href="problems.html" class="nav-btn sketchy-border" style="transform: rotate(-1deg); background: #34495e;">🏠 Problems</a>
+        <h1 class="nav-title">✨ Loop & Pattern Masterclass</h1>
+        <div style="display:flex; gap:10px;">
+            <a href="learn.html" class="nav-btn sketchy-border" style="background: #9b59b6; transform: rotate(1deg);">📖 Concepts</a>
+            <button id="theme-toggle" class="nav-btn sketchy-border" style="cursor: pointer; background: #2c3e50; transform: rotate(-1deg);">🌙 Blackboard</button>
+        </div>
+    </div>
+
+    <!-- Mobile Dropdown Selector -->
+    <div class="mobile-select-container">
+        <select id="mobile-pattern-select">
+            <!-- Options injected dynamically -->
+        </select>
+    </div>
+
+    <!-- Main Workspace Container -->
+    <div class="patterns-container">
+        <!-- Sidebar Selector (Desktop) -->
+        <aside class="patterns-sidebar sketchy-border">
+            <h2 class="hatched-orange-small" style="padding: 5px;">30 Core Patterns</h2>
+            <div style="overflow-y:auto; flex-grow:1;" id="pattern-list-container">
+                <!-- Javascript will inject list items here -->
+            </div>
+        </aside>
+
+        <!-- Canvas Area -->
+        <main class="patterns-canvas">
+            <!-- Pattern Controls -->
+            <div class="control-panel sketchy-border">
+                <div class="control-group">
+                    <label for="grid-n-slider" style="font-weight:bold;">Grid Size N: <span id="n-val" style="color:#e67e22; font-weight:bold;">5</span></label>
+                    <input type="range" id="grid-n-slider" min="2" max="9" value="5" class="control-slider">
+                </div>
+
+                <div class="control-group" style="gap:8px;">
+                    <button id="btn-prev" class="sim-btn" style="background:#3498db;" title="Step Backward">⏮ Back</button>
+                    <button id="btn-play" class="sim-btn" title="Auto Run Simulation">▶ Play</button>
+                    <button id="btn-next" class="sim-btn" style="background:#3498db;" title="Step Forward">Next ⏭</button>
+                    <button id="btn-reset" class="sim-btn" style="background:#e74c3c;" title="Reset Simulation">Reset</button>
+                </div>
+
+                <div class="control-group">
+                    <label for="speed-slider" style="font-weight:bold;">Speed: <span id="speed-val">1x</span></label>
+                    <input type="range" id="speed-slider" min="1" max="4" value="2" class="control-slider">
+                </div>
+            </div>
+
+            <!-- Workspace Grid (Visual & Code) -->
+            <div class="workspace-grid">
+                <!-- Visualizer -->
+                <div class="whiteboard-box sketchy-border">
+                    <h3 class="hatched-blue-small" style="padding: 2px 10px;">🎨 Whiteboard Canvas</h3>
+                    <div class="pattern-grid-visualizer" id="canvas-grid-box">
+                        <!-- Dynamic pattern grid goes here -->
+                    </div>
+                </div>
+
+                <!-- Code Tracker -->
+                <div class="whiteboard-box sketchy-border" style="background: #272822; border-color: #272822;">
+                    <h3 class="hatched-red-small" style="padding: 2px 10px; background-color: #272822; color: #f1c40f; border-color: #f1c40f;">💻 Loop execution</h3>
+                    <div style="display:flex; flex-direction:column; flex-grow:1; overflow:hidden;">
+                        <pre class="code-explorer" id="code-box-content">
+                            <!-- Code injected here -->
+                        </pre>
+                        <!-- Terminal Log -->
+                        <div style="background: #1e1e1e; border-top: 2px solid #333; padding: 10px; height: 100px; overflow-y: auto; font-family: monospace; font-size: 0.95rem; color: #a6e22e;">
+                            <b style="color: #66d9ef;">Terminal Output:</b>
+                            <div id="terminal-out" style="margin-top: 5px; white-space: pre-wrap;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Explanation & Details -->
+            <div class="explain-card sketchy-border">
+                <h3 class="hatched-green-small" style="padding: 2px 10px;">💡 Algorithm Breakdown & Formulas</h3>
+                <div class="explain-details" id="pattern-explain-content">
+                    <!-- Dynamic explanation injected here -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Script connection -->
+    <script src="patterns.js"></script>
+    <script>
+        // Blackboard Theme Toggle (handles invert filter)
+        const themeToggle = document.getElementById('theme-toggle');
+        
+        // Load initial state
+        if (localStorage.getItem('theme') === 'dark') {
+            document.documentElement.classList.add('dark-mode');
+            themeToggle.textContent = '☀️ Whiteboard';
+        } else {
+            themeToggle.textContent = '🌙 Blackboard';
+        }
+
+        themeToggle.addEventListener('click', () => {
+            document.documentElement.classList.toggle('dark-mode');
+            if (document.documentElement.classList.contains('dark-mode')) {
+                localStorage.setItem('theme', 'dark');
+                themeToggle.textContent = '☀️ Whiteboard';
+            } else {
+                localStorage.setItem('theme', 'light');
+                themeToggle.textContent = '🌙 Blackboard';
+            }
+        });
+    </script>
+</body>
+</html>
