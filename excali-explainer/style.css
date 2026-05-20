@@ -3,6 +3,8 @@
     --text-color: #111;
     --red-hatch: rgba(228, 62, 59, 0.4);
     --orange-hatch: rgba(243, 156, 18, 0.4);
+    --blue-hatch: rgba(52, 152, 219, 0.4);
+    --green-hatch: rgba(46, 204, 113, 0.4);
 }
 
 body {
@@ -49,6 +51,14 @@ body.modal-open { overflow: hidden; }
 }
 .hatched-orange-small {
     background: repeating-linear-gradient(60deg, transparent, transparent 4px, var(--orange-hatch) 4px, var(--orange-hatch) 5px);
+    background-color: #fff;
+}
+.hatched-blue-small {
+    background: repeating-linear-gradient(60deg, transparent, transparent 4px, var(--blue-hatch) 4px, var(--blue-hatch) 5px);
+    background-color: #fff;
+}
+.hatched-green-small {
+    background: repeating-linear-gradient(60deg, transparent, transparent 4px, var(--green-hatch) 4px, var(--green-hatch) 5px);
     background-color: #fff;
 }
 

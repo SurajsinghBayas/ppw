@@ -450,6 +450,462 @@ const day2Problems = [
     }
 ];
 
+const day3Problems = [
+    { 
+        q: "Q1", file: "day03/natural.java", desc: "Print all natural numbers from 1 to n using while loop",
+        concept: "Standard iteration with a counter using a pre-conditional loop (while loop).",
+        pro: "While loops verify conditions before executing the body. Ensure that the loop counter is incremented properly inside the block to avoid an infinite loop state.",
+        pseudo: `1. START
+2. Read N
+3. Set i = 1
+4. WHILE i <= N DO:
+     Print i
+     i = i + 1
+5. END`,
+        flow: "flowchart TD\n A([Start]) --> B[/Input N/]\n B --> C[i = 1]\n C --> D{i <= N?}\n D -- Yes --> E[/Print i/]\n E --> F[i++]\n F --> D\n D -- No --> G([End])"
+    },
+    { 
+        q: "Q2", file: "day03/natural.java", desc: "Print all natural numbers in reverse (n to 1) using while loop",
+        concept: "Decremental iteration starting from a maximum boundary down to a minimum boundary.",
+        pro: "Ensure the loop control variable is decremented using `i--` and that the boundary check uses `>= 1` so the loop terminates correctly.",
+        pseudo: `1. START
+2. Read N
+3. Set i = N
+4. WHILE i >= 1 DO:
+     Print i
+     i = i - 1
+5. END`,
+        flow: "flowchart TD\n A([Start]) --> B[/Input N/]\n B --> C[i = N]\n C --> D{i >= 1?}\n D -- Yes --> E[/Print i/]\n E --> F[i--]\n F --> D\n D -- No --> G([End])"
+    },
+    { 
+        q: "Q3", file: "day03/alphabets.java", desc: "Print all alphabets from a to z using while loop",
+        concept: "Character arithmetic using under-the-hood Unicode integer values in Java.",
+        pro: "In Java, `char` is an unsigned 16-bit numeric type. We can use characters directly in loop logic (e.g., `char a = 'A'; a++` incrementing internally as ASCII/Unicode integers).",
+        pseudo: `1. START
+2. Set ch = 'a'
+3. WHILE ch <= 'z' DO:
+     Print ch
+     ch = ch + 1
+4. END`,
+        flow: "flowchart TD\n A([Start]) --> B[ch = 'a']\n B --> C{ch <= 'z'?}\n C -- Yes --> D[/Print ch/]\n D --> E[ch++]\n E --> C\n C -- No --> F([End])"
+    },
+    { 
+        q: "Q4", file: "day03/evenodd.java", desc: "Print all even numbers between 1 to 100 using while loop",
+        concept: "Range-bound filtering of numbers divisible by 2.",
+        pro: "Instead of testing every number with `i % 2 == 0` (which adds a branch instruction), you can optimize performance by starting at 2 and incrementing by 2 (`i += 2`).",
+        pseudo: `1. START
+2. Set i = 1
+3. WHILE i <= 100 DO:
+     IF i % 2 == 0 THEN:
+       Print i
+     i = i + 1
+4. END`,
+        flow: "flowchart TD\n A([Start]) --> B[i = 1]\n B --> C{i <= 100?}\n C -- Yes --> D{i % 2 == 0?}\n D -- Yes --> E[/Print i/]\n D -- No --> F[i++]\n E --> F\n F --> C\n C -- No --> G([End])"
+    },
+    { 
+        q: "Q5", file: "day03/evenodd.java", desc: "Print all odd numbers between 1 to 100",
+        concept: "Filtering numbers that are not divisible by 2.",
+        pro: "Modulo on negative numbers in Java can return negative remainders. Always check `i % 2 != 0` instead of `== 1` for a general-purpose check.",
+        pseudo: `1. START
+2. Set i = 1
+3. WHILE i <= 100 DO:
+     IF i % 2 != 0 THEN:
+       Print i
+     i = i + 1
+4. END`,
+        flow: "flowchart TD\n A([Start]) --> B[i = 1]\n B --> C{i <= 100?}\n C -- Yes --> D{i % 2 != 0?}\n D -- Yes --> E[/Print i/]\n D -- No --> F[i++]\n E --> F\n F --> C\n C -- No --> G([End])"
+    },
+    { 
+        q: "Q6", file: "day03/sum.java", desc: "Find the sum of all natural numbers between 1 to n",
+        concept: "Accumulating values across a range into a running sum variable.",
+        pro: "For very large inputs, integer sums can easily exceed `Integer.MAX_VALUE` (2,147,483,647). Consider using a `long` for the sum or the direct formula `n * (n + 1) / 2` for O(1) complexity.",
+        pseudo: `1. START
+2. Read N, Set sum = 0, i = 1
+3. WHILE i <= N DO:
+     sum = sum + i
+     i = i + 1
+4. Print sum
+5. END`,
+        flow: "flowchart TD\n A([Start]) --> B[/Input N/]\n B --> C[sum = 0, i = 1]\n C --> D{i <= N?}\n D -- Yes --> E[sum += i]\n E --> F[i++]\n F --> D\n D -- No --> G[/Print sum/] --> H([End])"
+    },
+    { 
+        q: "Q7", file: "day03/sumevenodd.java", desc: "Find the sum of all even numbers between 1 to n",
+        concept: "Conditional arithmetic aggregation focusing on multiples of 2.",
+        pro: "Branching inside a tight loop can cause CPU branch mispredictions. A branchless or step-optimized version `i += 2` is faster in production scenarios.",
+        pseudo: `1. START
+2. Read N, Set sum = 0, i = 1
+3. WHILE i <= N DO:
+     IF i % 2 == 0 THEN:
+       sum = sum + i
+     i = i + 1
+4. Print sum
+5. END`,
+        flow: "flowchart TD\n A([Start]) --> B[/Input N/]\n B --> C[sumeven = 0, i = 1]\n C --> D{i <= N?}\n D -- Yes --> E{i % 2 == 0?}\n E -- Yes --> F[sumeven += i]\n E -- No --> G[i++]\n F --> G\n G --> D\n D -- No --> H[/Print sumeven/] --> I([End])"
+    },
+    { 
+        q: "Q8", file: "day03/sumevenodd.java", desc: "Find the sum of all odd numbers between 1 to n",
+        concept: "Conditional accumulation targeting values with remainder 1 when divided by 2.",
+        pro: "A neat mathematical theorem: the sum of the first N odd numbers is always exactly $N^2$. This lets us bypass loops entirely if starting from 1.",
+        pseudo: `1. START
+2. Read N, Set sum = 0, i = 1
+3. WHILE i <= N DO:
+     IF i % 2 != 0 THEN:
+       sum = sum + i
+     i = i + 1
+4. Print sum
+5. END`,
+        flow: "flowchart TD\n A([Start]) --> B[/Input N/]\n B --> C[sumodd = 0, i = 1]\n C --> D{i <= N?}\n D -- Yes --> E{i % 2 != 0?}\n E -- Yes --> F[sumodd += i]\n E -- No --> G[i++]\n F --> G\n G --> D\n D -- No --> H[/Print sumodd/] --> I([End])"
+    },
+    { 
+        q: "Q9", file: "day03/table.java", desc: "Print a multiplication table of any number",
+        concept: "Computing the multiples of a base number using loop counters.",
+        pro: "Using `System.out.printf()` format strings makes the printing output clean and readable without creating redundant, ephemeral String objects.",
+        pseudo: `1. START
+2. Read N
+3. Set i = 1
+4. WHILE i <= 10 DO:
+     Print N + " x " + i + " = " + (N * i)
+     i = i + 1
+5. END`,
+        flow: "flowchart TD\n A([Start]) --> B[/Input N/]\n B --> C[i = 1]\n C --> D{i <= 10?}\n D -- Yes --> E[/Print N * i/]\n E --> F[i++]\n F --> D\n D -- No --> G([End])"
+    },
+    { 
+        q: "Q10", file: "day03/nodigits.java", desc: "Count the number of digits in a number",
+        concept: "Base-10 logarithmic decomposition of an integer using integer division.",
+        pro: "Integer division by 10 discards the least significant digit, executing in O(log10(N)) time. Alternatively, we can use `(int)Math.log10(n) + 1` for an O(1) approach (handle 0 explicitly).",
+        pseudo: `1. START
+2. Read N, Set count = 0
+3. WHILE N > 0 DO:
+     count = count + 1
+     N = N / 10
+4. Print count
+5. END`,
+        flow: "flowchart TD\n A([Start]) --> B[/Input N/]\n B --> C[count = 0]\n C --> D{N > 0?}\n D -- Yes --> E[count++]\n E --> F[N = N / 10]\n F --> D\n D -- No --> G[/Print count/] --> H([End])"
+    },
+    { 
+        q: "Q11", file: "day03/sumdigits.java", desc: "Calculate the sum of digits of a number",
+        concept: "Extracting individual digits using mathematical modulo and summing them.",
+        pro: "Extracting a digit via `num % 10` is highly efficient. For negative numbers, make sure to take `Math.abs(num)` beforehand to prevent adding negative values.",
+        pseudo: `1. START
+2. Read N, Set sum = 0
+3. WHILE N > 0 DO:
+     d = N % 10
+     sum = sum + d
+     N = N / 10
+4. Print sum
+5. END`,
+        flow: "flowchart TD\n A([Start]) --> B[/Input N/]\n B --> C[sum = 0]\n C --> D{N > 0?}\n D -- Yes --> E[d = N % 10]\n E --> F[sum += d]\n F --> G[N /= 10]\n G --> D\n D -- No --> H[/Print sum/] --> I([End])"
+    },
+    { 
+        q: "Q12", file: "day03/prodigits.java", desc: "Calculate the product of digits of a number",
+        concept: "Multiplying extracted digits of a base-10 number sequentially.",
+        pro: "If any digit is 0, the entire product is immediately 0. We can optimize by breaking out of the loop early if `prod == 0`.",
+        pseudo: `1. START
+2. Read N, Set prod = 1
+3. WHILE N > 0 DO:
+     d = N % 10
+     prod = prod * d
+     N = N / 10
+4. Print prod
+5. END`,
+        flow: "flowchart TD\n A([Start]) --> B[/Input N/]\n B --> C[prod = 1]\n C --> D{N > 0?}\n D -- Yes --> E[d = N % 10]\n E --> F[prod *= d]\n F --> G[N /= 10]\n G --> D\n D -- No --> H[/Print prod/] --> I([End])"
+    },
+    { 
+        q: "Q13", file: "day03/palindrome.java", desc: "Enter a number and print its reverse",
+        concept: "Reconstructing an integer backwards by multiplying the accumulator by 10 and adding the last digit.",
+        pro: "Beware of integer overflow! Reversing `2147483647` (Max Int) will overflow `Integer.MAX_VALUE`. Use a `long` for the reversed holder to prevent overflow bugs.",
+        pseudo: `1. START
+2. Read N, Set rev = 0
+3. WHILE N > 0 DO:
+     d = N % 10
+     rev = (rev * 10) + d
+     N = N / 10
+4. Print rev
+5. END`,
+        flow: "flowchart TD\n A([Start]) --> B[/Input N/]\n B --> C[rev = 0]\n C --> D{N > 0?}\n D -- Yes --> E[d = N % 10]\n E --> F[rev = rev * 10 + d]\n F --> G[N /= 10]\n G --> D\n D -- No --> H[/Print rev/] --> I([End])"
+    },
+    { 
+        q: "Q14", file: "day03/palindrome.java", desc: "Check whether a number is palindrome or not",
+        concept: "Comparing the mathematically reversed number with the original number.",
+        pro: "Always store the original number in a temporary variable because the digits extraction process reduces the original number to 0.",
+        pseudo: `1. START
+2. Read N, Set temp = N, rev = 0
+3. WHILE N > 0 DO:
+     d = N % 10
+     rev = (rev * 10) + d
+     N = N / 10
+4. IF rev == temp THEN:
+     Print "palindrome"
+   ELSE:
+     Print "not palindrome"
+5. END`,
+        flow: "flowchart TD\n A([Start]) --> B[/Input N/]\n B --> C[temp = N, rev = 0]\n C --> D{N > 0?}\n D -- Yes --> E[d = N % 10]\n E --> F[rev = rev * 10 + d]\n F --> G[N /= 10]\n G --> D\n D -- No --> H{rev == temp?}\n H -- Yes --> I[/Palindrome/]\n H -- No --> J[/Not Palindrome/]"
+    },
+    { 
+        q: "Q15", file: "day03/ascii.java", desc: "Print all ASCII characters with their values",
+        concept: "Mapping integer numeric codes from 0 to 255 to their character glyphs.",
+        pro: "Values 0-31 are control characters (like CR, LF, ESC). Printing them directly might disrupt console formatting or output nothing visually.",
+        pseudo: `1. START
+2. Set i = 0
+3. WHILE i <= 255 DO:
+     Print i + " = " + (char)i
+     i = i + 1
+4. END`,
+        flow: "flowchart TD\n A([Start]) --> B[i = 0]\n B --> C{i <= 255?}\n C -- Yes --> D[/Print i & (char)i/]\n D --> E[i++]\n E --> C\n C -- No --> F([End])"
+    },
+    { 
+        q: "Q16", file: "day03/pow.java", desc: "Find power of a number",
+        concept: "Iteratively multiplying a base number by itself exponent times, or using Math.pow.",
+        pro: "Iterating takes O(exponent) time. For production code with massive exponents, use Binary Exponentiation (Exponentiation by Squaring) to achieve O(log(exponent)) time complexity.",
+        pseudo: `1. START
+2. Read base, power
+3. Set result = 1, i = 1
+4. WHILE i <= power DO:
+     result = result * base
+     i = i + 1
+5. Print result
+6. END`,
+        flow: "flowchart TD\n A([Start]) --> B[/Input base, power/]\n B --> C[result = 1, i = 1]\n C --> D{i <= power?}\n D -- Yes --> E[result *= base]\n E --> F[i++]\n F --> D\n D -- No --> G[/Print result/] --> H([End])"
+    },
+    { 
+        q: "Q17", file: "day03/factor.java", desc: "Find all factors of a number",
+        concept: "Checking numbers up to n to identify which integers divide n without a remainder.",
+        pro: "Instead of searching all numbers up to N (O(N) complexity), we can loop up to $\\sqrt{N}$ since factors occur in pairs (e.g. if `i` divides `N`, then `N/i` is also a factor). This cuts computation to O($\\sqrt{N}$).",
+        pseudo: `1. START
+2. Read N
+3. Set i = 1
+4. WHILE i <= N DO:
+     IF N % i == 0 THEN:
+       Print i
+     i = i + 1
+5. END`,
+        flow: "flowchart TD\n A([Start]) --> B[/Input N/]\n B --> C[i = 1]\n C --> D{i <= N?}\n D -- Yes --> E{N % i == 0?}\n E -- Yes --> F[/Print i/]\n E -- No --> G[i++]\n F --> G\n G --> D\n D -- No --> H([End])"
+    },
+    { 
+        q: "Q18", file: "day03/dignum.java", desc: "Find the first and last digit of a number",
+        concept: "Extracting boundary digits of an integer mathematically.",
+        pro: "Last digit is always `N % 10`. To get the first digit, we can use division `/= 10` until the value is less than 10. Note that in the user's file `dignum.java`, the labels are swapped: first is printed as last, and last as first!",
+        pseudo: `1. START
+2. Read N
+3. last = N % 10
+4. WHILE N >= 10 DO:
+     N = N / 10
+5. first = N
+6. Print first, last
+7. END`,
+        flow: "flowchart TD\n A([Start]) --> B[/Input N/]\n B --> C[last = N % 10]\n C --> D{N >= 10?}\n D -- Yes --> E[N = N / 10]\n E --> D\n D -- No --> F[first = N]\n F --> G[/Print first, last/] --> H([End])"
+    },
+    { 
+        q: "Q19", file: "day03/dignum.java", desc: "Find the sum of the first and last digit of a number",
+        concept: "Isolating boundary digits and adding them together.",
+        pro: "For single-digit numbers, the first and last digits are the exact same value. The sum will be double the digit itself.",
+        pseudo: `1. START
+2. Read N
+3. last = N % 10
+4. WHILE N >= 10 DO:
+     N = N / 10
+5. first = N
+6. sum = first + last
+7. Print sum
+8. END`,
+        flow: "flowchart LR\n A[/Input N/] --> B[last = N % 10] & C[Divide to find first]\n B & C --> D[sum = first + last]\n D --> E[/Print sum/]"
+    },
+    { 
+        q: "Q20", file: "day03/dignum.java", desc: "Swap first and last digits of a number",
+        concept: "Extracting the head and tail of an integer, then recombining them with the middle digits.",
+        pro: "Formula: `last * 10^(digits-1) + middle_digits + first`. The middle digits are extracted via modular arithmetic: `(temp % 10^(digits-1)) / 10 * 10`.",
+        pseudo: `1. START
+2. Read N, Find digits count
+3. last = N % 10
+4. first = N / 10^(digits-1)
+5. middle = (N % 10^(digits-1)) / 10 * 10
+6. swapped = last * 10^(digits-1) + middle + first
+7. Print swapped
+8. END`,
+        flow: "flowchart TD\n A[/Input N (e.g. 345)/] --> B[last = 5, first = 3, count = 3]\n B --> C[middle = (345 % 100) / 10 * 10 = 40]\n C --> D[swapped = 5 * 100 + 40 + 3 = 543]\n D --> E[/Print swapped/]"
+    },
+    { 
+        q: "Q21", file: "day03/prime.java", desc: "Check Number Is Prime Number or Not",
+        concept: "Testing divisibility of a number from 2 to n-1.",
+        pro: "To optimize, only loop from 2 to $\\sqrt{N}$. If no factor is found in that range, the number is guaranteed to be prime. Numbers <= 1 are not prime.",
+        pseudo: `1. START
+2. Read N, Set count = 0
+3. FOR i = 2 TO N-1 DO:
+     IF N % i == 0 THEN:
+       count = count + 1
+4. IF count == 0 AND N > 1 THEN:
+     Print "Prime"
+   ELSE:
+     Print "Not Prime"
+5. END`,
+        flow: "flowchart TD\n A([Start]) --> B[/Input N/]\n B --> C[count = 0, i = 2]\n C --> D{i < N?}\n D -- Yes --> E{N % i == 0?}\n E -- Yes --> F[count++]\n E -- No --> G[i++]\n F --> G\n G --> D\n D -- No --> H{count > 0?}\n H -- Yes --> I[/Not Prime/]\n H -- No --> J[/Prime/]"
+    },
+    { 
+        q: "Q22", file: "day03/perfect.java", desc: "Check Number Is Perfect Number or Not",
+        concept: "Checking if a positive integer is equal to the sum of its proper divisors.",
+        pro: "Perfect numbers are very rare (6, 28, 496, 8128). An optimized divisor search runs in O($\\sqrt{N}$) by adding both `i` and `N/i` to the sum at the same time.",
+        pseudo: `1. START
+2. Read N, Set sum = 0, i = 1
+3. WHILE i < N DO:
+     IF N % i == 0 THEN:
+       sum = sum + i
+     i = i + 1
+4. IF sum == N THEN:
+     Print "Perfect"
+   ELSE:
+     Print "Not Perfect"
+5. END`,
+        flow: "flowchart TD\n A([Start]) --> B[/Input N/]\n B --> C[sum = 0, i = 1]\n C --> D{i < N?}\n D -- Yes --> E{N % i == 0?}\n E -- Yes --> F[sum += i]\n E -- No --> G[i++]\n F --> G\n G --> D\n D -- No --> H{sum == N?}\n H -- Yes --> I[/Perfect/]\n H -- No --> J[/Not Perfect/]"
+    },
+    { 
+        q: "Q23", file: "day03/duck.java", desc: "Check Number Is Duck Number or Not",
+        concept: "Identifying if a number contains a zero digit that is not a leading zero.",
+        pro: "In the user's `duck.java`, the check is `n.charAt(i) == 0`. This is a bug because it compares to the ASCII null character instead of the character `'0'`. Correct code compares to `'0'`.",
+        pseudo: `1. START
+2. Read N as String
+3. Set i = 1, isDuck = false
+4. WHILE i < length(N) DO:
+     IF charAt(N, i) == '0' THEN:
+       isDuck = true
+       BREAK
+     i = i + 1
+5. IF isDuck == true THEN Print "Duck" ELSE Print "Not Duck"
+6. END`,
+        flow: "flowchart TD\n A([Start]) --> B[/Read N as String/]\n B --> C[i = 1]\n C --> D{i < length?}\n D -- Yes --> E{N.charAt(i) == '0'?}\n E -- Yes --> F[/Duck Number/]\n E -- No --> G[i++]\n G --> D\n D -- No --> H[/Not Duck/]"
+    },
+    { 
+        q: "Q24", file: "day03/strong.java", desc: "Check Number Is Strong Number or Not",
+        concept: "Summing factorials of individual digits and checking if the sum equals the original number.",
+        pro: "In `strong.java`, the file only calculates the factorial of the entire input. A true strong check requires mapping each digit to its factorial (precomputing 0! to 9! in an array makes it extremely fast).",
+        pseudo: `1. START
+2. Read N, Set temp = N, sum = 0
+3. WHILE temp > 0 DO:
+     d = temp % 10
+     sum = sum + factorial(d)
+     temp = temp / 10
+4. IF sum == N THEN Print "Strong" ELSE Print "Not Strong"
+5. END`,
+        flow: "flowchart TD\n A([Start]) --> B[/Input N/]\n B --> C[temp = N, sum = 0]\n C --> D{temp > 0?}\n D -- Yes --> E[d = temp % 10]\n E --> F[sum += factorial of d]\n F --> G[temp /= 10]\n G --> D\n D -- No --> H{sum == N?}\n H -- Yes --> I[/Strong/]\n H -- No --> J[/Not Strong/]"
+    },
+    { 
+        q: "Q25", file: "day03/armstrong.java", desc: "Check Number Is Armstrong Number or Not",
+        concept: "Summing the digits raised to the power of the total number of digits, then comparing with the original value.",
+        pro: "First count the digits (say `count`). Then raise each digit to the power of `count`. Be careful with floating-point inaccuracies when casting `Math.pow()` to `int`.",
+        pseudo: `1. START
+2. Read N, count = digitsCount(N), temp = N, sum = 0
+3. WHILE temp > 0 DO:
+     d = temp % 10
+     sum = sum + Math.pow(d, count)
+     temp = temp / 10
+4. IF sum == N THEN Print "Armstrong" ELSE Print "Not Armstrong"
+5. END`,
+        flow: "flowchart TD\n A([Start]) --> B[/Input N/]\n B --> C[count = digit count, temp = N, sum = 0]\n C --> D{temp > 0?}\n D -- Yes --> E[d = temp % 10]\n E --> F[sum += d ^ count]\n F --> G[temp /= 10]\n G --> D\n D -- No --> H{sum == N?}\n H -- Yes --> I[/Armstrong/]\n H -- No --> J[/Not Armstrong/]"
+    }
+];
+
+const day3Patterns = [
+    { 
+        q: "Pattern 1", file: "day03/p1.java", desc: "1 to i Increasing Number Triangle",
+        concept: "Inner loop bounds depend on outer loop variable `i`.",
+        pro: "Outer loop tracks row `i` from 1 to 5. Inner loop tracks column `j` from 1 to `i`, printing column values sequentially.",
+        pseudo: `1. START
+2. FOR i = 1 TO 5 DO:
+     FOR j = 1 TO i DO:
+       Print j
+     Print Newline
+3. END`,
+        flow: "flowchart TD\n A([Start]) --> B[i = 1]\n B --> C{i <= 5?}\n C -- Yes --> D[j = 1]\n D --> E{j <= i?}\n E -- Yes --> F[/Print j/]\n F --> G[j++]\n G --> E\n E -- No --> H[/Print Newline/]\n H --> I[i++]\n I --> C\n C -- No --> J([End])"
+    },
+    { 
+        q: "Pattern 2", file: "day03/p1.java", desc: "1 to i Decreasing Number Triangle",
+        concept: "Running the outer loop counter backwards to shrink the column boundaries.",
+        pro: "Outer loop goes from 5 down to 1 (`i--`). Inner loop goes from 1 to `i`. This shrinks the width of each row sequentially.",
+        pseudo: `1. START
+2. FOR i = 5 DOWNTO 1 DO:
+       FOR j = 1 TO i DO:
+         Print j
+       Print Newline
+3. END`,
+        flow: "flowchart TD\n A([Start]) --> B[i = 5]\n B --> C{i >= 1?}\n C -- Yes --> D[j = 1]\n D --> E{j <= i?}\n E -- Yes --> F[/Print j/]\n F --> G[j++]\n G --> E\n E -- No --> H[/Print Newline/]\n H --> I[i--]\n I --> C\n C -- No --> J([End])"
+    },
+    { 
+        q: "Pattern 3", file: "day03/p1.java", desc: "Increasing Star Triangle",
+        concept: "Triangular layout displaying standard literal symbols.",
+        pro: "Prints a constant string value `'* '` instead of numerical loop counters inside the triangular loop bounds.",
+        pseudo: `1. START
+2. FOR i = 1 TO 5 DO:
+     FOR j = 1 TO i DO:
+       Print "* "
+     Print Newline
+3. END`,
+        flow: "flowchart TD\n A([Start]) --> B[i = 1]\n B --> C{i <= 5?}\n C -- Yes --> D[j = 1]\n D --> E{j <= i?}\n E -- Yes --> F[/Print '* '/]\n F --> G[j++]\n G --> E\n E -- No --> H[/Print Newline/]\n H --> I[i++]\n I --> C\n C -- No --> J([End])"
+    },
+    { 
+        q: "Pattern 4", file: "day03/p1.java", desc: "Decreasing Star Triangle",
+        concept: "Decreasing row boundaries printing symbolic literals.",
+        pro: "Renders an inverted star triangle using outer counter decrement `i--` and symbol printing.",
+        pseudo: `1. START
+2. FOR i = 5 DOWNTO 1 DO:
+     FOR j = 1 TO i DO:
+       Print "* "
+     Print Newline
+3. END`,
+        flow: "flowchart TD\n A([Start]) --> B[i = 5]\n B --> C{i >= 1?}\n C -- Yes --> D[j = 1]\n D --> E{j <= i?}\n E -- Yes --> F[/Print '* '/]\n F --> G[j++]\n G --> E\n E -- No --> H[/Print Newline/]\n H --> I[i--]\n I --> C\n C -- No --> J([End])"
+    },
+    { 
+        q: "Pattern 5", file: "day03/p1.java", desc: "Increasing Character Triangle (A to G)",
+        concept: "Character loop progression using char bounds.",
+        pro: "Outer loop character ranges from 'A' to 'G', while inner loop prints characters from 'A' up to the current outer row char `a`.",
+        pseudo: `1. START
+2. FOR a = 'A' TO 'G' DO:
+     FOR b = 'A' TO a DO:
+       Print b
+     Print Newline
+3. END`,
+        flow: "flowchart TD\n A([Start]) --> B[a = 'A']\n B --> C{a <= 'G'?}\n C -- Yes --> D[b = 'A']\n D --> E{b <= a?}\n E -- Yes --> F[/Print b/]\n F --> G[b++]\n G --> E\n E -- No --> H[/Print Newline/]\n H --> I[a++]\n I --> C\n C -- No --> J([End])"
+    },
+    { 
+        q: "Pattern 6", file: "day03/p1.java", desc: "Decreasing Character Triangle (G down to A)",
+        concept: "Decreasing character outer boundary loops with alphabetical print rows.",
+        pro: "Outer loop is decremented from 'G' to 'A' using `a--` to shrink column ranges.",
+        pseudo: `1. START
+2. FOR a = 'G' DOWNTO 'A' DO:
+     FOR b = 'A' TO a DO:
+       Print b
+     Print Newline
+3. END`,
+        flow: "flowchart TD\n A([Start]) --> B[a = 'G']\n B --> C{a >= 'A'?}\n C -- Yes --> D[b = 'A']\n D --> E{b <= a?}\n E -- Yes --> F[/Print b/]\n F --> G[b++]\n G --> E\n E -- No --> H[/Print Newline/]\n H --> I[a--]\n I --> C\n C -- No --> J([End])"
+    },
+    { 
+        q: "Pattern 7", file: "day03/p1.java", desc: "Centered Star Pyramid with Spaces",
+        concept: "Multiple nested loop operations dividing column print between empty spacing and star characters.",
+        pro: "The space loop prints `5-i` spaces. The star loop prints `i` stars with trailing spaces, creating a perfectly balanced pyramid.",
+        pseudo: `1. START
+2. FOR i = 1 TO 5 DO:
+     FOR j = 1 TO (5 - i) DO:
+       Print " "
+     FOR k = 1 TO i DO:
+       Print "* "
+     Print Newline
+3. END`,
+        flow: "flowchart TD\n A([Start]) --> B[i = 1]\n B --> C{i <= 5?}\n C -- Yes --> D[j = 1]\n D --> E{j < 5-i?}\n E -- Yes --> F[/Print ' '/]\n F --> G[j++]\n G --> E\n E -- No --> H[k = 1]\n H --> I{k <= i?}\n I -- Yes --> J[/Print '* '/]\n J --> K[k++]\n K --> I\n I -- No --> L[/Print Newline/]\n L --> M[i++]\n M --> C\n C -- No --> N([End])"
+    },
+    { 
+        q: "Pattern 8", file: "day03/p1.java", desc: "Centered Number Pyramid with Spaces",
+        concept: "Applying centered empty space loops followed by number iterations.",
+        pro: "Generates a centered pyramid containing column indices rather than literal symbols. Combines spacing with numeric loops.",
+        pseudo: `1. START
+2. FOR i = 1 TO 5 DO:
+     FOR j = 1 TO (5 - i) DO:
+       Print " "
+     FOR k = 1 TO i DO:
+       Print k + " "
+     Print Newline
+3. END`,
+        flow: "flowchart TD\n A([Start]) --> B[i = 1]\n B --> C{i <= 5?}\n C -- Yes --> D[j = 1]\n D --> E{j < 5-i?}\n E -- Yes --> F[/Print ' '/]\n F --> G[j++]\n G --> E\n E -- No --> H[k = 1]\n H --> I{k <= i?}\n I -- Yes --> J[/Print k + ' '/]\n J --> L[k++]\n L --> I\n I -- No --> M[/Print Newline/]\n M --> N[i++]\n N --> C\n C -- No --> O([End])"
+    }
+];
+
 function createCard(item) {
     const card = document.createElement('div');
     const rot = (Math.random() - 0.5) * 5;
@@ -469,11 +925,15 @@ function createCard(item) {
 
 const day1Grid = document.getElementById('day1-grid');
 const day2Grid = document.getElementById('day2-grid');
+const day3Grid = document.getElementById('day3-grid');
+const day3PatternsGrid = document.getElementById('day3-patterns-grid');
 
 day1Problems.forEach(p => day1Grid.appendChild(createCard(p)));
 day2Problems.forEach(p => day2Grid.appendChild(createCard(p)));
+day3Problems.forEach(p => day3Grid.appendChild(createCard(p)));
+day3Patterns.forEach(p => day3PatternsGrid.appendChild(createCard(p)));
 
-const allProblems = [...day1Problems, ...day2Problems];
+const allProblems = [...day1Problems, ...day2Problems, ...day3Problems, ...day3Patterns];
 let currentProblemIndex = -1;
 
 // Live Search Functionality
