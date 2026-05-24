@@ -3,8 +3,9 @@ package day02;
 import java.util.*;
 
 public class palindrome {
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
+        System.out.println("enter a number");
         int num = sc.nextInt();
         int temp = num;
         int d;
@@ -12,7 +13,7 @@ public class palindrome {
         while (num > 0) {
             d = num % 10;
             rev = (rev * 10) + d;
-            num = num / 10;
+            d = d / 10;
 
         }
         if (rev == temp) {
